@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Form from "./Form";
+import List from "./List";
+import "./Form.css";
+import "./List.css";
 
-function App() {
+
+
+const App = () => {
+  const [items, setItems] = useState([]);
+
+  const handleDeleteItem = (item) => {
+    setItems(items.filter((x) => x.id !== item.id));
+  };
+
+  const handleEditItem = (item) => {
+    setItems(
+      items.map((x) => {
+        if (x.id === item.id) {
+          return item;
+        }
+        return x;
+      })
+    );
+  };
+
+  const handleSubmitForm = (item) => {
+    setItems([...items, { ...item, id: Date.now() }]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Web Form</h1>
+      <Form onSubmit={handleSubmitForm} />
+      <br />
+      <List items={items} onDelete={handleDeleteItem} onEdit={handleEditItem} />
     </div>
   );
-}
+};
 
 export default App;
